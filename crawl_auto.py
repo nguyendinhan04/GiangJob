@@ -5,6 +5,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 import time
+import json
 import datetime
 import re
 
@@ -245,7 +246,7 @@ def open_website(search_country, search_keyword,url):
                 
             print(f"Tìm thấy {len(child_divs)} thẻ con trong container")
             cnt = 0
-            with open(f"crawl_result.csv", "a", encoding="utf-8") as f:
+            with open(f"crawl_result.jsonl", "a", encoding="utf-8") as f:
                 for index, div in enumerate(child_divs):
                     # kiem tra neu the co class la PiKi2c thi bo qua
                     print("-------------------------------------------------------------------")
@@ -314,7 +315,15 @@ def open_website(search_country, search_keyword,url):
                                 get_email_driver.quit()
 
                     print(f"Tên: {name}, Địa chỉ: {address}, Số điện thoại: {phone}, Link: {web_link}, Email : {email_str}")
-                    f.write(f"{name}\t{address}\t{phone}\t{web_link}\t{email_str}\n")
+                    # f.write(f"{name}\t{address}\t{phone}\t{web_link}\t{email_str}\n")
+                    data = {
+                        "name": name,
+                        "address": address,
+                        "phone": phone,
+                        "web_link": web_link,
+                        "email": email_str
+                    }
+                    f.write(f"{json.dumps(data, ensure_ascii=False)}\n")
                     cnt += 1
 
                 print(f"Tổng số thẻ con không có class PiKi2c: {cnt}")
