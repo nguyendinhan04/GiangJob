@@ -4,7 +4,7 @@
 
 ---
 
-## 📦 Yêu cầu hệ thống
+## Yêu cầu hệ thống
 
 - Python 3.7+
 - Kết nối Internet
@@ -13,13 +13,13 @@
 
 ---
 
-## ⚙️ Hướng dẫn cài đặt
+## Hướng dẫn cài đặt
 
 ### 1. Cài Python
 
 Truy cập trang chủ Python và tải phiên bản mới nhất:
 
-👉 https://www.python.org/
+https://www.python.org/
 
 ### 2. Cài đặt các package cần thiết
 
@@ -29,7 +29,7 @@ Mở Terminal hoặc CMD trong thư mục chứa file `requirements.txt`, sau đ
 pip install -r requirements.txt
 ```
 
-## 🚀 Hướng dẫn sử dụng
+## Hướng dẫn sử dụng
 ### 1. Mở CMD hoặc Terminal tại thư mục chứa ```crawl_auto.py```
 ### 2. chạy lệnh
 ```bash
@@ -42,7 +42,7 @@ từ khóa (Ví dụ: English )
 ```bash
 crawl_result.jsonl
 ```
-### 📂 Cấu trúc thư mục
+### Cấu trúc thư mục
 ```bash
 ├── crawl_auto.py
 ├── requirements.txt
