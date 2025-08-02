@@ -30,7 +30,7 @@ pip install -r requirements.txt
 ```
 
 ## 🚀 Hướng dẫn sử dụng
-### 1. Mở CMD hoặc Terminal tại thư mục chứa crawl_auto.py
+### 1. Mở CMD hoặc Terminal tại thư mục chứa ```bash crawl_auto.py```
 ### 2. chạy lệnh
 ```bash
 python crawl_auto.py
