@@ -6,39 +6,38 @@
 
 ## Yêu cầu hệ thống
 
-- Python 3.7+
-- Kết nối Internet
-- Đã cài đặt Google Chrome
-- pip (Python package installer)
+- Đã cài đặt Docker
 
 ---
 
 ## Hướng dẫn cài đặt
 
-### 1. Cài Python
+### 1. Tạo image và chạy container Docker
 
-Truy cập trang chủ Python và tải phiên bản mới nhất:
-
-https://www.python.org/
-
-### 2. Cài đặt các package cần thiết
-
-Mở Terminal hoặc CMD trong thư mục chứa file `requirements.txt`, sau đó chạy lệnh:
-
+Trên hệ điều hành window, mở Docker Desktop, mở `cmd` và nhập lệnh sau để kiểm tra docker đã cài đặt và chạy thành công hay chưa
 ```bash
-pip install -r requirements.txt
+docker --version
+```
+Di chuyển vào thư mục chứa file Dockerfile và nhập lệnh sau để tạo docker image
+```bash
+docker build . --tag selenium_crawl:extend
+```
+Nhập lệnh sau để kiểm tra xem image đã cài đặt thành công hay chưa
+```bash
+docker image ls
+```
+Trong cùng thư mục, tiếp tục nhập lệnh sau để chạy container
+```bash
+docker-compose up
 ```
 
 ## Hướng dẫn sử dụng
-### 1. Mở CMD hoặc Terminal tại thư mục chứa ```crawl_auto.py```
+### 1. Mở CMD hoặc Terminal
 ### 2. chạy lệnh
 ```bash
-python crawl_auto.py
+docker exec -it crawl-selenium-1 --country "Tên quốc gia" --keyword "Keyword muốn tìm kiếm"
 ```
-### 3. Nhập thông tin về 
-tên quốc gia  (Ví dụ: Vietnam)
-từ khóa (Ví dụ: English )
-### 4. Kết quả lưu tại file 
+### 3. Kết quả lưu tại file 
 ```bash
 crawl_result.jsonl
 ```
@@ -46,6 +45,8 @@ crawl_result.jsonl
 ```bash
 ├── crawl_auto.py
 ├── requirements.txt
+├── docker-compose.yaml
+├── Dockerfile
 ├── crawl_result.jsonl       # File kết quả sau khi crawl
 └── README.md
 ```

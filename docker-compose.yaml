@@ -1,0 +1,14 @@
+name: crawl
+
+services:
+  selenium:
+    image: selenium_crawl:extend  # Fix: iamge → image
+    volumes:
+      - ./:/opt/project  # Fix: thêm container path
+    environment:
+      - SE_NODE_MAX_SESSIONS=2
+      - SE_NODE_OVERRIDE_MAX_SESSIONS=true
+    ports:
+      - "4445:4444"
+      - "7901:7900"  # Port để connect đến Selenium Grid
+    shm_size: 2gb

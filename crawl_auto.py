@@ -8,22 +8,7 @@ import time
 import json
 import datetime
 import re
-
-
-key_words = [
-    "Language school",
-    "Language center",
-    "International school",
-    "English school",
-]
-
-citys = [
-    "Hà Nội",
-    "Hải Phòng",
-    "Đà Nẵng",
-    "Cần Thơ",
-    "TP. Hồ Chí Minh",
-]
+import argparse
 
 def is_valid_email(email):
     """
@@ -144,12 +129,13 @@ def get_driver():
     
     # Khởi tạo WebDriver với nhiều cách khác nhau
     driver = None
-    
+    selenium_grid_url = 'http://localhost:4444/wd/hub'
     # Cách 1: Thử sử dụng webdriver-manager (cần cài đặt: pip install webdriver-manager)
     try:
         from webdriver_manager.chrome import ChromeDriverManager
         service = Service(ChromeDriverManager().install())
         driver = webdriver.Chrome(service=service, options=chrome_options)
+        # driver = webdriver.Remote(command_executor=selenium_grid_url,options=chrome_options)
         print("Sử dụng webdriver-manager thành công")
     except ImportError:
         print("webdriver-manager chưa được cài đặt")
@@ -191,9 +177,9 @@ def open_website(search_country, search_keyword,url):
         print("Không thể khởi tạo WebDriver")
         return None
 
-    # Kiểm tra xem file crawl_result.csv đã tồn tại chưa, nếu có thì xóa nó
+    # Kiểm tra xem file crawl_result.json đã tồn tại chưa, nếu có thì xóa nó
     import os
-    csv_file_path = "crawl_result.csv"
+    csv_file_path = "/opt/project/crawl_result.jsonl"
     if os.path.exists(csv_file_path):
         try:
             os.remove(csv_file_path)
@@ -246,7 +232,7 @@ def open_website(search_country, search_keyword,url):
                 
             print(f"Tìm thấy {len(child_divs)} thẻ con trong container")
             cnt = 0
-            with open(f"crawl_result.jsonl", "a", encoding="utf-8") as f:
+            with open(f"/opt/project/crawl_result.jsonl", "a", encoding="utf-8") as f:
                 for index, div in enumerate(child_divs):
                     # kiem tra neu the co class la PiKi2c thi bo qua
                     print("-------------------------------------------------------------------")
@@ -327,7 +313,7 @@ def open_website(search_country, search_keyword,url):
                     cnt += 1
 
                 print(f"Tổng số thẻ con không có class PiKi2c: {cnt}")
-                # input("Nhấn Enter để tiếp tục hoặc Ctrl+C để dừng...")
+                input("Nhấn Enter để tiếp tục hoặc Ctrl+F để dừng...")
                 
                 from selenium.common.exceptions import NoSuchElementException
                 try:
@@ -388,9 +374,15 @@ if __name__ == "__main__":
     print("=== Kiểm tra phiên bản Chrome ===")
     check_chrome_version()
     
+    parser = argparse.ArgumentParser(description="Crawl thông tin trường học")
+    parser.add_argument("--country", type=str, default="Việt Nam", help="Tên quốc gia")
+    parser.add_argument("--keyword", type=str, default="trường học", help="Từ khóa tìm kiếm")
+    args = parser.parse_args()
+    
+
     # Ví dụ 1: Mở trang web đơn giản
-    country = input("Nhập tên quốc gia (ví dụ: Việt Nam): ")
-    keyword = input("Nhập các từ khóa tìm kiếm: ")
+    country = args.country
+    keyword = args.keyword
 
     print("\n=== Mở trang web ===")
     driver = open_website(country, keyword,"https://www.google.com/search?q=English+school+H%E1%BA%A3i+Ph%C3%B2ng&sca_esv=c4d3b1b5b2456fed&hl=vi&biw=1349&bih=985&tbm=lcl&ei=dQN5aMSMAv2h0-kP5oD90AU&ved=0ahUKEwiEm4KoiMSOAxX90DQHHWZAH1oQ4dUDCAo&uact=5&oq=English+school+H%E1%BA%A3i+Ph%C3%B2ng&gs_lp=Eg1nd3Mtd2l6LWxvY2FsIhtFbmdsaXNoIHNjaG9vbCBI4bqjaSBQaMOybmdIAFAAWABwAHgAkAEAmAEAoAEAqgEAuAEDyAEAmAIAoAIAmAMAkgcAoAcAsgcAuAcAwgcAyAcA&sclient=gws-wiz-local#rlfi=hd:;si:;mv:[[20.8693047,106.72400460000001],[20.814306,106.6360823]];tbs:lrf:!1m4!1u3!2m2!3m1!1e1!1m4!1u2!2m2!2m1!1e1!2m1!1e2!2m1!1e3!3sIAE,lf:1,lf_ui:14")
