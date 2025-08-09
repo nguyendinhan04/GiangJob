@@ -1,4 +1,4 @@
-# 🕸️ CRAWL TOOLS
+# CRAWL TOOLS
 
 **CRAWL TOOLS** là một công cụ thu thập thông tin từ Internet dựa trên từ khóa và tên quốc gia do người dùng nhập. Dữ liệu thu được sẽ được lưu ở định dạng `.jsonl` để dễ dàng xử lý và phân tích sau này.
 
