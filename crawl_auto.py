@@ -313,7 +313,7 @@ def open_website(search_country, search_keyword,url):
                     cnt += 1
 
                 print(f"Tổng số thẻ con không có class PiKi2c: {cnt}")
-                input("Nhấn Enter để tiếp tục hoặc Ctrl+F để dừng...")
+                # input("Nhấn Enter để tiếp tục hoặc Ctrl+F để dừng...")
                 
                 from selenium.common.exceptions import NoSuchElementException
                 try:
