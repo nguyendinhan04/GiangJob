@@ -84,7 +84,7 @@ def find_email(driver,link):
             # print(f"Lỗi khi tìm email: {e}")
             return []
     except Exception as e:
-        # print(f"Lỗi khi mở trang web: {e}")
+        print(f"Lỗi khi mở trang web find email: {e}")
         return []
 
 def safe_find_text(parent, selector):
@@ -360,7 +360,7 @@ def check_chrome_version():
             result = subprocess.run(['google-chrome', '--version'], capture_output=True, text=True)
             if result.returncode == 0:
                 version = result.stdout.strip()
-                print(f"Phiên bản Chrome: {version}")
+                # print(f"Phiên bản Chrome: {version}")
                 return version
             else:
                 print("Không thể xác định phiên bản Chrome")
