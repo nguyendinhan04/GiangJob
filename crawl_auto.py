@@ -67,24 +67,24 @@ def is_valid_email(email):
 def find_email(driver,link):
     try:
         driver.get(link)
-        print(f"Đang mở trang: {link}")
+        # print(f"Đang mở trang: {link}")
         time.sleep(3)
         html_content = driver.page_source
 
         try:
             emails = re.findall(r"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+", html_content)
             emails = list(set(emails))
-            print("Các email tìm được:", emails)
+            # print("Các email tìm được:", emails)
             filtered_emails = []
             for email in emails:
                 if is_valid_email(email):
                     filtered_emails.append(email)
             return filtered_emails
         except Exception as e:
-            print(f"Lỗi khi tìm email: {e}")
+            # print(f"Lỗi khi tìm email: {e}")
             return []
     except Exception as e:
-        print(f"Lỗi khi mở trang web: {e}")
+        # print(f"Lỗi khi mở trang web: {e}")
         return []
 
 def safe_find_text(parent, selector):
@@ -136,7 +136,7 @@ def get_driver():
         service = Service(ChromeDriverManager().install())
         driver = webdriver.Chrome(service=service, options=chrome_options)
         # driver = webdriver.Remote(command_executor=selenium_grid_url,options=chrome_options)
-        print("Sử dụng webdriver-manager thành công")
+        # print("Sử dụng webdriver-manager thành công")
     except ImportError:
         print("webdriver-manager chưa được cài đặt")
     except Exception as e:
@@ -147,7 +147,7 @@ def get_driver():
         try:
             service = Service(executable_path='chromedriver.exe')
             driver = webdriver.Chrome(service=service, options=chrome_options)
-            print("Sử dụng chromedriver.exe từ thư mục hiện tại")
+            # print("Sử dụng chromedriver.exe từ thư mục hiện tại")
         except Exception as e:
             print(f"Lỗi khi sử dụng chromedriver.exe: {e}")
     
@@ -155,7 +155,7 @@ def get_driver():
     if not driver:
         try:
             driver = webdriver.Chrome(options=chrome_options)
-            print("Sử dụng ChromeDriver từ PATH")
+            # print("Sử dụng ChromeDriver từ PATH")
         except Exception as e:
             print(f"Lỗi khi sử dụng ChromeDriver từ PATH: {e}")
             print("Vui lòng:")
@@ -191,10 +191,10 @@ def open_website(search_country, search_keyword,url):
 
     try:
         # Mở trang web
-        print(f"Đang mở trang web: {url}")
+        # print(f"Đang mở trang web: {url}")
         driver.get(url)
         time.sleep(5)  # Chờ một chút để trang web load
-        print("done waiting")
+        # print("done waiting")
         # Đợi trang web load
         # Lấy thông tin trang web
         page_title = driver.title
@@ -206,8 +206,8 @@ def open_website(search_country, search_keyword,url):
         # enter
         search.send_keys(u'\ue007')  # Nhấn Enter
         
-        print(f"Tiêu đề trang: {page_title}")
-        print(f"URL hiện tại: {current_url}")
+        # print(f"Tiêu đề trang: {page_title}")
+        # print(f"URL hiện tại: {current_url}")
         is_page_left = True
         while is_page_left:
             time.sleep(5)
@@ -223,25 +223,25 @@ def open_website(search_country, search_keyword,url):
             if not lists:
                 print("Không tìm thấy danh sách nào trên trang web")
                 return None
-            print(f"Tìm thấy danh sách trên trang web")
+            # print(f"Tìm thấy danh sách trên trang web")
 
             child_divs = driver.find_elements(By.CSS_SELECTOR, "#rl_ist0 > div > div.rl_tile-group > div.rlfl__tls.rl_tls > div")
             if not child_divs:
                 print("Không tìm thấy thẻ con nào trong container")
                 return None
                 
-            print(f"Tìm thấy {len(child_divs)} thẻ con trong container")
+            # print(f"Tìm thấy {len(child_divs)} thẻ con trong container")
             cnt = 0
             with open(f"/opt/project/crawl_result.jsonl", "a", encoding="utf-8") as f:
                 for index, div in enumerate(child_divs):
                     # kiem tra neu the co class la PiKi2c thi bo qua
-                    print("-------------------------------------------------------------------")
+                    # print("-------------------------------------------------------------------")
                     if "PiKi2c" in div.get_attribute("class"):
                         continue
 
                     # Chekc if div have any class, if not print text
                     if not div.get_attribute("id"):
-                        print(f"Thẻ con {index + 1} k có id: {div.text}")
+                        # print(f"Thẻ con {index + 1} k có id: {div.text}")
                         continue
                     
                     # print(f"Thẻ con {index + 1} có id: {div.text}")
@@ -260,7 +260,7 @@ def open_website(search_country, search_keyword,url):
                     elif(len(div.find_elements(By.CSS_SELECTOR, ":scope>div")) == 1 ):
                         info = div.find_element(By.CSS_SELECTOR, "div:nth-child(1) > div > div:nth-child(1) > a > div > div")
                     else:
-                        print(f"Thẻ con {index + 1} không có thông tin cần thiết")
+                        # print(f"Thẻ con {index + 1} không có thông tin cần thiết")
                         continue
 
                     # Lay ten
@@ -300,7 +300,7 @@ def open_website(search_country, search_keyword,url):
                             if get_email_driver:
                                 get_email_driver.quit()
 
-                    print(f"Tên: {name}, Địa chỉ: {address}, Số điện thoại: {phone}, Link: {web_link}, Email : {email_str}")
+                    # print(f"Tên: {name}, Địa chỉ: {address}, Số điện thoại: {phone}, Link: {web_link}, Email : {email_str}")
                     # f.write(f"{name}\t{address}\t{phone}\t{web_link}\t{email_str}\n")
                     data = {
                         "name": name,
@@ -372,7 +372,7 @@ def check_chrome_version():
 
 if __name__ == "__main__":
     # Kiểm tra phiên bản Chrome
-    print("=== Kiểm tra phiên bản Chrome ===")
+    # print("=== Kiểm tra phiên bản Chrome ===")
     check_chrome_version()
     
     parser = argparse.ArgumentParser(description="Crawl thông tin trường học")
@@ -385,7 +385,7 @@ if __name__ == "__main__":
     country = args.country
     keyword = args.keyword
 
-    print("\n=== Mở trang web ===")
+    # print("\n=== Mở trang web ===")
     driver = open_website(country, keyword,"https://www.google.com/search?q=English+school+H%E1%BA%A3i+Ph%C3%B2ng&sca_esv=c4d3b1b5b2456fed&hl=vi&biw=1349&bih=985&tbm=lcl&ei=dQN5aMSMAv2h0-kP5oD90AU&ved=0ahUKEwiEm4KoiMSOAxX90DQHHWZAH1oQ4dUDCAo&uact=5&oq=English+school+H%E1%BA%A3i+Ph%C3%B2ng&gs_lp=Eg1nd3Mtd2l6LWxvY2FsIhtFbmdsaXNoIHNjaG9vbCBI4bqjaSBQaMOybmdIAFAAWABwAHgAkAEAmAEAoAEAqgEAuAEDyAEAmAIAoAIAmAMAkgcAoAcAsgcAuAcAwgcAyAcA&sclient=gws-wiz-local#rlfi=hd:;si:;mv:[[20.8693047,106.72400460000001],[20.814306,106.6360823]];tbs:lrf:!1m4!1u3!2m2!3m1!1e1!1m4!1u2!2m2!2m1!1e1!2m1!1e2!2m1!1e3!3sIAE,lf:1,lf_ui:14")
     time.sleep(1000)  # Chờ để xem trang web
     if driver:
