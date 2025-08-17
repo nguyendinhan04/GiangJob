@@ -232,97 +232,96 @@ def open_website(search_country, search_keyword,url):
                 
             # print(f"Tìm thấy {len(child_divs)} thẻ con trong container")
             cnt = 0
-            with open(f"/opt/project/crawl_result.jsonl", "a", encoding="utf-8") as f:
-                for index, div in enumerate(child_divs):
-                    # kiem tra neu the co class la PiKi2c thi bo qua
-                    # print("-------------------------------------------------------------------")
-                    if "PiKi2c" in div.get_attribute("class"):
-                        continue
+            for index, div in enumerate(child_divs):
+                # kiem tra neu the co class la PiKi2c thi bo qua
+                # print("-------------------------------------------------------------------")
+                if "PiKi2c" in div.get_attribute("class"):
+                    continue
 
-                    # Chekc if div have any class, if not print text
-                    if not div.get_attribute("id"):
-                        # print(f"Thẻ con {index + 1} k có id: {div.text}")
-                        continue
-                    
-                    # print(f"Thẻ con {index + 1} có id: {div.text}")
-                    # print(len(div.find_elements(By.CSS_SELECTOR, " :scope>div")))
-                    
-                    name = None
-                    class_type = None
-                    address = None
-                    phone = None
-                    web_link = None
-
-                    #lay thon tin co ban
-                    if (len(div.find_elements(By.CSS_SELECTOR, " :scope>div")) >1 ):
-                        info = div.find_element(By.CSS_SELECTOR, "div:nth-child(2) > div > div:nth-child(1) > a > div > div")
-
-                    elif(len(div.find_elements(By.CSS_SELECTOR, ":scope>div")) == 1 ):
-                        info = div.find_element(By.CSS_SELECTOR, "div:nth-child(1) > div > div:nth-child(1) > a > div > div")
-                    else:
-                        # print(f"Thẻ con {index + 1} không có thông tin cần thiết")
-                        continue
-
-                    # Lay ten
-                    name = safe_find_text(info, "div:nth-child(1) > span")
-
-                    # Lay link trang web 
-                    temp_list = div.find_elements(By.CSS_SELECTOR, "div:nth-child(2) > div > a")
-                    web_link = None
-                    if len(temp_list) > 1:
-                        web_link = temp_list[0].get_attribute("href") 
-
-
-                    name_section = safe_find_element(info, "div:nth-child(1) > span")
-                    name_section.click()
-                    # Chờ để thông tin chi tiết tải xong
-                    time.sleep(1)
-                    WebDriverWait(driver, 10).until(
-                        EC.presence_of_element_located((By.CSS_SELECTOR, 'div[data-attrid="kc:/location/location:address"] > div > div > span:nth-child(2)'))
-                    )
-
-                    #lay dia chi va so dien thoai
-                    address = safe_find_text(driver, 'div[data-attrid="kc:/location/location:address"] > div > div > span:nth-child(2)')
-                    phone = safe_find_text(driver, 'div[data-attrid="kc:/local:alt phone"] > div > div > span:nth-child(2)')
-
-
-                    email_str = None
-                    if web_link is not None:
-                        try:
-                            get_email_driver = get_driver()
-                            emails = find_email(get_email_driver, web_link)
-                            if emails:
-                                # convert emails to string seperated by comma
-                                email_str = ', '.join(emails)
-                        except Exception as e:
-                            print(f"Lỗi khi tìm email: {e}")
-                        finally:
-                            if get_email_driver:
-                                get_email_driver.quit()
-
-                    # print(f"Tên: {name}, Địa chỉ: {address}, Số điện thoại: {phone}, Link: {web_link}, Email : {email_str}")
-                    # f.write(f"{name}\t{address}\t{phone}\t{web_link}\t{email_str}\n")
-                    data = {
-                        "name": name,
-                        "address": address,
-                        "phone": phone,
-                        "web_link": web_link,
-                        "email": email_str
-                    }
-                    # f.write(f"{json.dumps(data, ensure_ascii=False)}\n")
-                    print(data)
-                    cnt += 1
-
-                # print(f"Tổng số thẻ con không có class PiKi2c: {cnt}")
-                # input("Nhấn Enter để tiếp tục hoặc Ctrl+F để dừng...")
+                # Chekc if div have any class, if not print text
+                if not div.get_attribute("id"):
+                    # print(f"Thẻ con {index + 1} k có id: {div.text}")
+                    continue
                 
-                from selenium.common.exceptions import NoSuchElementException
-                try:
-                    button = driver.find_element(By.CSS_SELECTOR, "#pnnext > span.oeN89d")
-                    button.click()
-                except NoSuchElementException:
-                    # print("Không còn trang tiếp theo")
-                    is_page_left = False
+                # print(f"Thẻ con {index + 1} có id: {div.text}")
+                # print(len(div.find_elements(By.CSS_SELECTOR, " :scope>div")))
+                
+                name = None
+                class_type = None
+                address = None
+                phone = None
+                web_link = None
+
+                #lay thon tin co ban
+                if (len(div.find_elements(By.CSS_SELECTOR, " :scope>div")) >1 ):
+                    info = div.find_element(By.CSS_SELECTOR, "div:nth-child(2) > div > div:nth-child(1) > a > div > div")
+
+                elif(len(div.find_elements(By.CSS_SELECTOR, ":scope>div")) == 1 ):
+                    info = div.find_element(By.CSS_SELECTOR, "div:nth-child(1) > div > div:nth-child(1) > a > div > div")
+                else:
+                    # print(f"Thẻ con {index + 1} không có thông tin cần thiết")
+                    continue
+
+                # Lay ten
+                name = safe_find_text(info, "div:nth-child(1) > span")
+
+                # Lay link trang web 
+                temp_list = div.find_elements(By.CSS_SELECTOR, "div:nth-child(2) > div > a")
+                web_link = None
+                if len(temp_list) > 1:
+                    web_link = temp_list[0].get_attribute("href") 
+
+
+                name_section = safe_find_element(info, "div:nth-child(1) > span")
+                name_section.click()
+                # Chờ để thông tin chi tiết tải xong
+                time.sleep(1)
+                WebDriverWait(driver, 10).until(
+                    EC.presence_of_element_located((By.CSS_SELECTOR, 'div[data-attrid="kc:/location/location:address"] > div > div > span:nth-child(2)'))
+                )
+
+                #lay dia chi va so dien thoai
+                address = safe_find_text(driver, 'div[data-attrid="kc:/location/location:address"] > div > div > span:nth-child(2)')
+                phone = safe_find_text(driver, 'div[data-attrid="kc:/local:alt phone"] > div > div > span:nth-child(2)')
+
+
+                email_str = None
+                if web_link is not None:
+                    try:
+                        get_email_driver = get_driver()
+                        emails = find_email(get_email_driver, web_link)
+                        if emails:
+                            # convert emails to string seperated by comma
+                            email_str = ', '.join(emails)
+                    except Exception as e:
+                        print(f"Lỗi khi tìm email: {e}")
+                    finally:
+                        if get_email_driver:
+                            get_email_driver.quit()
+
+                # print(f"Tên: {name}, Địa chỉ: {address}, Số điện thoại: {phone}, Link: {web_link}, Email : {email_str}")
+                # f.write(f"{name}\t{address}\t{phone}\t{web_link}\t{email_str}\n")
+                data = {
+                    "name": name,
+                    "address": address,
+                    "phone": phone,
+                    "web_link": web_link,
+                    "email": email_str
+                }
+                # f.write(f"{json.dumps(data, ensure_ascii=False)}\n")
+                print(data)
+                cnt += 1
+
+            # print(f"Tổng số thẻ con không có class PiKi2c: {cnt}")
+            # input("Nhấn Enter để tiếp tục hoặc Ctrl+F để dừng...")
+            
+            from selenium.common.exceptions import NoSuchElementException
+            try:
+                button = driver.find_element(By.CSS_SELECTOR, "#pnnext > span.oeN89d")
+                button.click()
+            except NoSuchElementException:
+                # print("Không còn trang tiếp theo")
+                is_page_left = False
 
                                     
         
@@ -351,7 +350,7 @@ def check_chrome_version():
             
             if result.returncode == 0:
                 version = result.stdout.split()[-1]
-                print(f"Phiên bản Chrome: {version}")
+                # print(f"Phiên bản Chrome: {version}")
                 return version
             else:
                 print("Không thể xác định phiên bản Chrome")
