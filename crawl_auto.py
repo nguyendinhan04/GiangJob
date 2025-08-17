@@ -178,16 +178,16 @@ def open_website(search_country, search_keyword,url):
         return None
 
     # Kiểm tra xem file crawl_result.json đã tồn tại chưa, nếu có thì xóa nó
-    import os
-    csv_file_path = "/opt/project/crawl_result.jsonl"
-    if os.path.exists(csv_file_path):
-        try:
-            os.remove(csv_file_path)
-            print(f"Đã xóa file {csv_file_path} cũ")
-        except Exception as e:
-            print(f"Lỗi khi xóa file {csv_file_path}: {e}")
-    else:
-        print(f"File {csv_file_path} chưa tồn tại")
+    # import os
+    # csv_file_path = "/opt/project/crawl_result.jsonl"
+    # if os.path.exists(csv_file_path):
+    #     try:
+    #         os.remove(csv_file_path)
+    #         print(f"Đã xóa file {csv_file_path} cũ")
+    #     except Exception as e:
+    #         print(f"Lỗi khi xóa file {csv_file_path}: {e}")
+    # else:
+    #     print(f"File {csv_file_path} chưa tồn tại")
 
     try:
         # Mở trang web
@@ -309,7 +309,8 @@ def open_website(search_country, search_keyword,url):
                         "web_link": web_link,
                         "email": email_str
                     }
-                    f.write(f"{json.dumps(data, ensure_ascii=False)}\n")
+                    # f.write(f"{json.dumps(data, ensure_ascii=False)}\n")
+                    print(data)
                     cnt += 1
 
                 print(f"Tổng số thẻ con không có class PiKi2c: {cnt}")
