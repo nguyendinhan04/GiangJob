@@ -313,7 +313,7 @@ def open_website(search_country, search_keyword,url):
                     print(data)
                     cnt += 1
 
-                print(f"Tổng số thẻ con không có class PiKi2c: {cnt}")
+                # print(f"Tổng số thẻ con không có class PiKi2c: {cnt}")
                 # input("Nhấn Enter để tiếp tục hoặc Ctrl+F để dừng...")
                 
                 from selenium.common.exceptions import NoSuchElementException
@@ -321,7 +321,7 @@ def open_website(search_country, search_keyword,url):
                     button = driver.find_element(By.CSS_SELECTOR, "#pnnext > span.oeN89d")
                     button.click()
                 except NoSuchElementException:
-                    print("Không còn trang tiếp theo")
+                    # print("Không còn trang tiếp theo")
                     is_page_left = False
 
                                     
