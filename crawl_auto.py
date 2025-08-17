@@ -329,6 +329,13 @@ def open_website(search_country, search_keyword,url):
         
     except Exception as e:
         print(f"Lỗi khi mở trang web: {e}")
+        print({
+                    "name": name,
+                    "address": address,
+                    "phone": phone,
+                    "web_link": web_link,
+                    "email": email_str
+                })
         driver.quit()
         return None
 
