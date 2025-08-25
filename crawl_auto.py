@@ -177,37 +177,25 @@ def open_website(search_country, search_keyword,url):
         print("Không thể khởi tạo WebDriver")
         return None
 
-    # Kiểm tra xem file crawl_result.json đã tồn tại chưa, nếu có thì xóa nó
-    # import os
-    # csv_file_path = "/opt/project/crawl_result.jsonl"
-    # if os.path.exists(csv_file_path):
-    #     try:
-    #         os.remove(csv_file_path)
-    #         print(f"Đã xóa file {csv_file_path} cũ")
-    #     except Exception as e:
-    #         print(f"Lỗi khi xóa file {csv_file_path}: {e}")
-    # else:
-    #     print(f"File {csv_file_path} chưa tồn tại")
-
     try:
-        # Mở trang web
+        # Step 1: Mở trang web
         # print(f"Đang mở trang web: {url}")
         driver.get(url)
         time.sleep(5)  # Chờ một chút để trang web load
-        # print("done waiting")
-        # Đợi trang web load
-        # Lấy thông tin trang web
+
         page_title = driver.title
         current_url = driver.current_url
         search = driver.find_element(By.CSS_SELECTOR, "#APjFqb")
-        # xoa he text trong ô tìm kiếm
+
+
+
+        # Step 2: xoa he text trong ô tìm kiếm và nhập từ khóa mới
         search.clear()
         search.send_keys(f"{search_country} {search_keyword}")
-        # enter
         search.send_keys(u'\ue007')  # Nhấn Enter
         
-        # print(f"Tiêu đề trang: {page_title}")
-        # print(f"URL hiện tại: {current_url}")
+
+        #Step 3: loop qua từng trang để lấy thông tin
         is_page_left = True
         while is_page_left:
             time.sleep(5)
@@ -220,17 +208,19 @@ def open_website(search_country, search_keyword,url):
 
             lists = driver.find_element(By.CSS_SELECTOR, "#rl_ist0 > div > div.rl_tile-group > div.rlfl__tls.rl_tls")
 
+
+            #Bước 3.1: loop qua từng phần tử trong danh sách
             if not lists:
                 print("Không tìm thấy danh sách nào trên trang web")
-                return None
-            # print(f"Tìm thấy danh sách trên trang web")
+                return driver
+            print(f"Tìm thấy danh sách trên trang web")
 
             child_divs = driver.find_elements(By.CSS_SELECTOR, "#rl_ist0 > div > div.rl_tile-group > div.rlfl__tls.rl_tls > div")
             if not child_divs:
                 print("Không tìm thấy thẻ con nào trong container")
-                return None
+                return driver
                 
-            # print(f"Tìm thấy {len(child_divs)} thẻ con trong container")
+            print(f"Tìm thấy {len(child_divs)} thẻ con trong container")
             cnt = 0
             for index, div in enumerate(child_divs):
                 # kiem tra neu the co class la PiKi2c thi bo qua
@@ -238,7 +228,7 @@ def open_website(search_country, search_keyword,url):
                 if "PiKi2c" in div.get_attribute("class"):
                     continue
 
-                # Chekc if div have any class, if not print text
+                # Check if div have any class, if not print text
                 if not div.get_attribute("id"):
                     # print(f"Thẻ con {index + 1} k có id: {div.text}")
                     continue
@@ -286,6 +276,7 @@ def open_website(search_country, search_keyword,url):
 
 
                 email_str = None
+                print("Bat dau lay email")
                 if web_link is not None:
                     try:
                         get_email_driver = get_driver()
@@ -298,9 +289,6 @@ def open_website(search_country, search_keyword,url):
                     finally:
                         if get_email_driver:
                             get_email_driver.quit()
-
-                # print(f"Tên: {name}, Địa chỉ: {address}, Số điện thoại: {phone}, Link: {web_link}, Email : {email_str}")
-                # f.write(f"{name}\t{address}\t{phone}\t{web_link}\t{email_str}\n")
                 data = {
                     "name": name,
                     "address": address,
@@ -308,19 +296,19 @@ def open_website(search_country, search_keyword,url):
                     "web_link": web_link,
                     "email": email_str
                 }
-                # f.write(f"{json.dumps(data, ensure_ascii=False)}\n")
                 print(data)
                 cnt += 1
 
-            # print(f"Tổng số thẻ con không có class PiKi2c: {cnt}")
-            # input("Nhấn Enter để tiếp tục hoặc Ctrl+F để dừng...")
+            input("Nhấn Enter để tiếp tục hoặc Ctrl+F để dừng...")
             
             from selenium.common.exceptions import NoSuchElementException
             try:
                 button = driver.find_element(By.CSS_SELECTOR, "#pnnext > span.oeN89d")
+                print("da tim thay nut")
                 button.click()
+                print("Chuyển sang trang tiếp theo")
             except NoSuchElementException:
-                # print("Không còn trang tiếp theo")
+                print("Không còn trang tiếp theo")
                 is_page_left = False
 
                                     
@@ -336,8 +324,7 @@ def open_website(search_country, search_keyword,url):
                     "web_link": web_link,
                     "email": email_str
                 })
-        driver.quit()
-        return None
+        return driver
 
 def check_chrome_version():
     """
@@ -393,6 +380,5 @@ if __name__ == "__main__":
 
     # print("\n=== Mở trang web ===")
     driver = open_website(country, keyword,"https://www.google.com/search?q=English+school+H%E1%BA%A3i+Ph%C3%B2ng&sca_esv=c4d3b1b5b2456fed&hl=vi&biw=1349&bih=985&tbm=lcl&ei=dQN5aMSMAv2h0-kP5oD90AU&ved=0ahUKEwiEm4KoiMSOAxX90DQHHWZAH1oQ4dUDCAo&uact=5&oq=English+school+H%E1%BA%A3i+Ph%C3%B2ng&gs_lp=Eg1nd3Mtd2l6LWxvY2FsIhtFbmdsaXNoIHNjaG9vbCBI4bqjaSBQaMOybmdIAFAAWABwAHgAkAEAmAEAoAEAqgEAuAEDyAEAmAIAoAIAmAMAkgcAoAcAsgcAuAcAwgcAyAcA&sclient=gws-wiz-local#rlfi=hd:;si:;mv:[[20.8693047,106.72400460000001],[20.814306,106.6360823]];tbs:lrf:!1m4!1u3!2m2!3m1!1e1!1m4!1u2!2m2!2m1!1e1!2m1!1e2!2m1!1e3!3sIAE,lf:1,lf_ui:14")
-    time.sleep(1000)  # Chờ để xem trang web
     if driver:
         driver.quit()
