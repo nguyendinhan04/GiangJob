@@ -226,6 +226,7 @@ def open_website(search_country, search_keyword,url):
                 # kiem tra neu the co class la PiKi2c thi bo qua
                 # print("-------------------------------------------------------------------")
                 if "PiKi2c" in div.get_attribute("class"):
+                    print("Bỏ qua thẻ con có class 'PiKi2c'")
                     continue
 
                 # Check if div have any class, if not print text
