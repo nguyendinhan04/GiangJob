@@ -266,7 +266,7 @@ def open_website(search_country, search_keyword,url):
 
                     print(f"Xong thẻ con {index + 1} k có id: {div.text}")
                     continue
-                print(f"Thẻ con {index + 1} có id: {div.text}")
+                print(f"Thẻ con {index + 1}")
                 # print(len(div.find_elements(By.CSS_SELECTOR, " :scope>div")))
                 
 
