@@ -224,16 +224,17 @@ def open_website(search_country, search_keyword,url):
             print(f"Tìm thấy {len(child_divs)} thẻ con trong container")
             cnt = 0
             for index, div in enumerate(child_divs):
-                # kiem tra neu the co class la PiKi2c thi bo qua
-                # print("-------------------------------------------------------------------")
-                if "PiKi2c" in div.get_attribute("class"):
-                    continue
-
                 name = None
                 class_type = None
                 address = None
                 phone = None
                 web_link = None
+                # kiem tra neu the co class la PiKi2c thi bo qua
+                # print("-------------------------------------------------------------------")
+                if "PiKi2c" in div.get_attribute("class"):
+                    print("Bỏ qua thẻ con có class PiKi2c")
+                    continue
+
 
                 # Check if div have any class, if not print text
                 if not div.get_attribute("id"):
