@@ -250,7 +250,7 @@ def open_website(search_country, search_keyword,url):
                 elif(len(div.find_elements(By.CSS_SELECTOR, ":scope>div")) == 1 ):
                     info = div.find_element(By.CSS_SELECTOR, "div:nth-child(1) > div > div:nth-child(1) > a > div > div")
                 else:
-                    # print(f"Thẻ con {index + 1} không có thông tin cần thiết")
+                    print(f"Thẻ con {index + 1} không có thông tin cần thiết")
                     continue
 
                 # Lay ten
