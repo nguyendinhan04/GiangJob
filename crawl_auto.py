@@ -214,14 +214,14 @@ def open_website(search_country, search_keyword,url):
             if not lists:
                 print("Không tìm thấy danh sách nào trên trang web")
                 return driver
-            print(f"Tìm thấy danh sách trên trang web")
+            # print(f"Tìm thấy danh sách trên trang web")
 
             child_divs = driver.find_elements(By.CSS_SELECTOR, "#rl_ist0 > div > div.rl_tile-group > div.rlfl__tls.rl_tls > div")
             if not child_divs:
                 print("Không tìm thấy thẻ con nào trong container")
                 return driver
                 
-            print(f"Tìm thấy {len(child_divs)} thẻ con trong container")
+            # print(f"Tìm thấy {len(child_divs)} thẻ con trong container")
             cnt = 0
             for index, div in enumerate(child_divs):
                 name = None
@@ -232,28 +232,54 @@ def open_website(search_country, search_keyword,url):
                 # kiem tra neu the co class la PiKi2c thi bo qua
                 # print("-------------------------------------------------------------------")
                 if "PiKi2c" in div.get_attribute("class"):
-                    print("Bỏ qua thẻ con có class PiKi2c")
+                    # print("Bỏ qua thẻ con có class PiKi2c")
                     continue
 
 
                 # Check if div have any class, if not print text
                 if not div.get_attribute("id"):
-                    print(f"Thẻ con {index + 1} k có id: {div.text}")
-                    childs_sponsored = div.find_elements(By.CSS_SELECTOR, "div")
+                    # print(f"Thẻ con {index + 1} k có id:")
+                    childs_sponsored = div.find_elements(By.CSS_SELECTOR, ":scope > div")
+                    # print(f"Tìm thấy {len(childs_sponsored)} thẻ con trong thẻ {index + 1} k có id:")
                     for child_sponsored in childs_sponsored:
                         if(child_sponsored.get_attribute("class") == "rKpRzc"):
                             continue
-
-                        info = child_sponsored.find_element(By.CSS_SELECTOR, "div > div:nth-child(2) > div:nth-child(2)")
+                        input("Nhan nut bat ky de tiep tuc")
+                        info = child_sponsored.find_element(By.CSS_SELECTOR, "div:nth-child(2) > div:nth-child(2)")
                         name = safe_find_text(info, "div:nth-child(1) > a > div > div > div:nth-child(1) > span")
 
 
-                        # temp_list = child_sponsored.find_elements(By.CSS_SELECTOR, "div:nth-child(2) > div:nth-child(2) > a")
-                        # web_link = None
-                        # if len(temp_list) > 1:
-                        #     web_link = temp_list[0].get_attribute("href")
+                        temp_list = child_sponsored.find_elements(By.CSS_SELECTOR, "div:nth-child(2) > div:nth-child(2) > a")
+                        web_link = None
+                        if len(temp_list) > 1:
+                            web_link = temp_list[0].get_attribute("href")
 
-                        # name_section = safe_find_element(info, "div:nth-child(1) > a > div > div > div:nth-child(1) > span")
+                        name_section = safe_find_element(info, "div:nth-child(1) > a > div > div > div:nth-child(1) > span")
+                        name_section.click()
+                        time.sleep(1)
+                        WebDriverWait(driver, 10).until(
+                            EC.presence_of_element_located((By.CSS_SELECTOR, 'div[data-attrid="kc:/location/location:address"] > div > div > span:nth-child(2)'))
+                        )
+
+                        #lay dia chi va so dien thoai
+                        address = safe_find_text(driver, 'div[data-attrid="kc:/location/location:address"] > div > div > span:nth-child(2)')
+                        phone = safe_find_text(driver, 'div[data-attrid="kc:/local:alt phone"] > div > div > span:nth-child(2)')
+
+
+                        email_str = None
+                        # print("Bat dau lay email")
+                        if web_link is not None:
+                            try:
+                                get_email_driver = get_driver()
+                                emails = find_email(get_email_driver, web_link)
+                                if emails:
+                                    # convert emails to string seperated by comma
+                                    email_str = ', '.join(emails)
+                            except Exception as e:
+                                print(f"Lỗi khi tìm email: {e}")
+                            finally:
+                                if get_email_driver:
+                                    get_email_driver.quit()
 
                         data = {
                             "name": name,
@@ -264,9 +290,9 @@ def open_website(search_country, search_keyword,url):
                         }
                         print(data)
 
-                    print(f"Xong thẻ con {index + 1} k có id: {div.text}")
+                    # print(f"Xong thẻ con {index + 1} k có id:")
                     continue
-                print(f"Thẻ con {index + 1}")
+                # print(f"Thẻ con {index + 1}")
                 # print(len(div.find_elements(By.CSS_SELECTOR, " :scope>div")))
                 
 
@@ -304,7 +330,7 @@ def open_website(search_country, search_keyword,url):
 
 
                 email_str = None
-                print("Bat dau lay email")
+                # print("Bat dau lay email")
                 if web_link is not None:
                     try:
                         get_email_driver = get_driver()
@@ -345,13 +371,6 @@ def open_website(search_country, search_keyword,url):
         
     except Exception as e:
         print(f"Lỗi khi mở trang web: {e}")
-        print({
-                    "name": name,
-                    "address": address,
-                    "phone": phone,
-                    "web_link": web_link,
-                    "email": email_str
-                })
         return driver
 
 def check_chrome_version():
@@ -409,4 +428,5 @@ if __name__ == "__main__":
     # print("\n=== Mở trang web ===")
     driver = open_website(country, keyword,"https://www.google.com/search?q=English+school+H%E1%BA%A3i+Ph%C3%B2ng&sca_esv=c4d3b1b5b2456fed&hl=vi&biw=1349&bih=985&tbm=lcl&ei=dQN5aMSMAv2h0-kP5oD90AU&ved=0ahUKEwiEm4KoiMSOAxX90DQHHWZAH1oQ4dUDCAo&uact=5&oq=English+school+H%E1%BA%A3i+Ph%C3%B2ng&gs_lp=Eg1nd3Mtd2l6LWxvY2FsIhtFbmdsaXNoIHNjaG9vbCBI4bqjaSBQaMOybmdIAFAAWABwAHgAkAEAmAEAoAEAqgEAuAEDyAEAmAIAoAIAmAMAkgcAoAcAsgcAuAcAwgcAyAcA&sclient=gws-wiz-local#rlfi=hd:;si:;mv:[[20.8693047,106.72400460000001],[20.814306,106.6360823]];tbs:lrf:!1m4!1u3!2m2!3m1!1e1!1m4!1u2!2m2!2m1!1e1!2m1!1e2!2m1!1e3!3sIAE,lf:1,lf_ui:14")
     if driver:
+        input("Nhan nut bat ky de tiep tuc")
         driver.quit()
