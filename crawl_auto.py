@@ -227,22 +227,47 @@ def open_website(search_country, search_keyword,url):
                 # kiem tra neu the co class la PiKi2c thi bo qua
                 # print("-------------------------------------------------------------------")
                 if "PiKi2c" in div.get_attribute("class"):
-                    print("Bỏ qua thẻ con có class 'PiKi2c'")
                     continue
 
-                # Check if div have any class, if not print text
-                if not div.get_attribute("id"):
-                    # print(f"Thẻ con {index + 1} k có id: {div.text}")
-                    continue
-                
-                # print(f"Thẻ con {index + 1} có id: {div.text}")
-                # print(len(div.find_elements(By.CSS_SELECTOR, " :scope>div")))
-                
                 name = None
                 class_type = None
                 address = None
                 phone = None
                 web_link = None
+
+                # Check if div have any class, if not print text
+                if not div.get_attribute("id"):
+                    print(f"Thẻ con {index + 1} k có id: {div.text}")
+                    childs_sponsored = div.find_elements(By.CSS_SELECTOR, "div")
+                    for child_sponsored in childs_sponsored:
+                        if(child_sponsored.get_attribute("class") == "rKpRzc"):
+                            continue
+
+                        info = child_sponsored.find_element(By.CSS_SELECTOR, "div > div:nth-child(2) > div:nth-child(2)")
+                        name = safe_find_text(info, "div:nth-child(1) > a > div > div > div:nth-child(1) > span")
+
+
+                        # temp_list = child_sponsored.find_elements(By.CSS_SELECTOR, "div:nth-child(2) > div:nth-child(2) > a")
+                        # web_link = None
+                        # if len(temp_list) > 1:
+                        #     web_link = temp_list[0].get_attribute("href")
+
+                        # name_section = safe_find_element(info, "div:nth-child(1) > a > div > div > div:nth-child(1) > span")
+
+                        data = {
+                            "name": name,
+                            "address": address,
+                            "phone": phone,
+                            "web_link": web_link,
+                            "email": email_str
+                        }
+                        print(data)
+
+                    print(f"Xong thẻ con {index + 1} k có id: {div.text}")
+                    continue
+                # print(f"Thẻ con {index + 1} có id: {div.text}")
+                # print(len(div.find_elements(By.CSS_SELECTOR, " :scope>div")))
+                
 
                 #lay thon tin co ban
                 if (len(div.find_elements(By.CSS_SELECTOR, " :scope>div")) >1 ):
