@@ -244,7 +244,7 @@ def open_website(search_country, search_keyword,url):
                     for child_sponsored in childs_sponsored:
                         if(child_sponsored.get_attribute("class") == "rKpRzc"):
                             continue
-                        input("Nhan nut bat ky de tiep tuc")
+                        # input("Nhan nut bat ky de tiep tuc")
                         info = child_sponsored.find_element(By.CSS_SELECTOR, "div:nth-child(2) > div:nth-child(2)")
                         name = safe_find_text(info, "div:nth-child(1) > a > div > div > div:nth-child(1) > span")
 
@@ -353,12 +353,12 @@ def open_website(search_country, search_keyword,url):
                 print(data)
                 cnt += 1
 
-            input("Nhấn Enter để tiếp tục hoặc Ctrl+F để dừng...")
+            # input("Nhấn Enter để tiếp tục hoặc Ctrl+F để dừng...")
             
             from selenium.common.exceptions import NoSuchElementException
             try:
                 button = driver.find_element(By.CSS_SELECTOR, "#pnnext > span.oeN89d")
-                print("da tim thay nut")
+                # print("da tim thay nut")
                 button.click()
                 print("Chuyển sang trang tiếp theo")
             except NoSuchElementException:
@@ -428,5 +428,5 @@ if __name__ == "__main__":
     # print("\n=== Mở trang web ===")
     driver = open_website(country, keyword,"https://www.google.com/search?q=English+school+H%E1%BA%A3i+Ph%C3%B2ng&sca_esv=c4d3b1b5b2456fed&hl=vi&biw=1349&bih=985&tbm=lcl&ei=dQN5aMSMAv2h0-kP5oD90AU&ved=0ahUKEwiEm4KoiMSOAxX90DQHHWZAH1oQ4dUDCAo&uact=5&oq=English+school+H%E1%BA%A3i+Ph%C3%B2ng&gs_lp=Eg1nd3Mtd2l6LWxvY2FsIhtFbmdsaXNoIHNjaG9vbCBI4bqjaSBQaMOybmdIAFAAWABwAHgAkAEAmAEAoAEAqgEAuAEDyAEAmAIAoAIAmAMAkgcAoAcAsgcAuAcAwgcAyAcA&sclient=gws-wiz-local#rlfi=hd:;si:;mv:[[20.8693047,106.72400460000001],[20.814306,106.6360823]];tbs:lrf:!1m4!1u3!2m2!3m1!1e1!1m4!1u2!2m2!2m1!1e1!2m1!1e2!2m1!1e3!3sIAE,lf:1,lf_ui:14")
     if driver:
-        input("Nhan nut bat ky de tiep tuc")
+        # input("Nhan nut bat ky de tiep tuc")
         driver.quit()
