@@ -192,7 +192,7 @@ def open_website(search_country, search_keyword,url):
         # Step 2: xoa he text trong ô tìm kiếm và nhập từ khóa mới
         search.clear()
         # search.send_keys(f"{search_country} {search_keyword}")
-        search.send_keys(f"{search_keyword} in {search_country}")
+        search.send_keys(f"{search_keyword} {search_country}")
         search.send_keys(u'\ue007')  # Nhấn Enter
         
 
